@@ -5,15 +5,17 @@ import model.GestorPedidos;
 import javax.swing.*;
 import java.awt.*;
 
-
 /**
  * Ventana principal de SpeedFast. Desde aquí el usuario abre la gestión
- * de repartidores, la gestión de pedidos y la asignación de entregas.
+ * de repartidores, de pedidos y de entregas.
  */
 public class VentanaPrincipal extends JFrame {
     private final GestorPedidos gestor;
+
+    // Ventanas de gestión ya abiertas, para traerlas al frente en vez de abrir otra igual
     private VentanaRepartidores ventanaRepartidores;
     private VentanaPedidos ventanaPedidos;
+    private VentanaEntregas ventanaEntregas;
 
     public VentanaPrincipal() {
         super("SpeedFast - Gestión de Entregas");
@@ -45,11 +47,11 @@ public class VentanaPrincipal extends JFrame {
         // Botones
         JButton btnRepartidores = crearBoton("Gestión de repartidores");
         JButton btnPedidos = crearBoton("Gestión de pedidos");
-        JButton btnEntregas = crearBoton("Asignar entrega");
+        JButton btnEntregas = crearBoton("Gestión de entregas");
 
         btnRepartidores.addActionListener(e -> abrirRepartidores());
         btnPedidos.addActionListener(e -> abrirPedidos());
-        btnEntregas.addActionListener(e -> abrirAsignarEntrega());
+        btnEntregas.addActionListener(e -> abrirEntregas());
 
         JPanel panelBotones = new JPanel(new GridLayout(3, 1, 0, 12));
         panelBotones.add(btnRepartidores);
@@ -69,7 +71,6 @@ public class VentanaPrincipal extends JFrame {
     }
 
     private void abrirRepartidores() {
-        // Si la ventana ya está abierta se trae al frente, en vez de abrir otra
         if (ventanaRepartidores == null || !ventanaRepartidores.isDisplayable()) {
             ventanaRepartidores = new VentanaRepartidores(gestor);
         }
@@ -85,8 +86,11 @@ public class VentanaPrincipal extends JFrame {
         ventanaPedidos.toFront();
     }
 
-    private void abrirAsignarEntrega() {
-        new VentanaAsignarEntrega().setVisible(true);
-
+    private void abrirEntregas() {
+        if (ventanaEntregas == null || !ventanaEntregas.isDisplayable()) {
+            ventanaEntregas = new VentanaEntregas(gestor);
+        }
+        ventanaEntregas.setVisible(true);
+        ventanaEntregas.toFront();
     }
 }

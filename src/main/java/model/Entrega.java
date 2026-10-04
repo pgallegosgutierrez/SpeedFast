@@ -8,6 +8,7 @@ import java.time.LocalTime;
  * junto con la fecha y la hora en que se registró.
  */
 public class Entrega {
+    private String id;
     private String idPedido;
     private String idRepartidor;
     private LocalDate fecha;
@@ -37,6 +38,28 @@ public class Entrega {
         this.idRepartidor = idRepartidor;
         this.fecha = fecha;
         this.hora = hora;
+    }
+
+    /**
+     * Crea una entrega que ya existe en la base de datos.
+     *
+     * @param id           identificador de la entrega en la base de datos
+     * @param idPedido     identificador del pedido que se entrega
+     * @param idRepartidor identificador del repartidor que realiza la entrega
+     * @param fecha        fecha de la entrega
+     * @param hora         hora de la entrega
+     */
+    public Entrega(String id, String idPedido, String idRepartidor, LocalDate fecha, LocalTime hora) {
+        this(idPedido, idRepartidor, fecha, hora);
+        this.id = id;
+    }
+
+    /**
+     *
+     * @return el identificador de la entrega en la base de datos, o null si aún no se guarda
+     */
+    public String getId() {
+        return id;
     }
 
     /**

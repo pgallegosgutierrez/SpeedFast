@@ -4,10 +4,11 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
+import java.util.Objects;
 
 /**
- * Código común de las ventanas de gestión: creación de tablas
- * y mensajes al usuario con JOptionPane.
+ * Código común de las ventanas de gestión: creación de tablas y botones,
+ * manejo de los JComboBox y mensajes al usuario con JOptionPane.
  */
 public class UtilVista {
 
@@ -94,6 +95,44 @@ public class UtilVista {
             }
         }
         return false;
+    }
+
+    /**
+     * Vuelve a llenar un combo y deja elegido, si todavía existe, el elemento que estaba elegido antes.
+     *
+     * @param combo combo a llenar
+     * @param items elementos nuevos, en el orden en que se mostrarán
+     */
+    public static void llenarCombo(JComboBox<ItemCombo> combo, List<ItemCombo> items) {
+        String idElegido = idElegido(combo);
+        combo.removeAllItems();
+        for (ItemCombo item : items) {
+            combo.addItem(item);
+        }
+        seleccionarItem(combo, idElegido);
+    }
+
+    /**
+     * Deja elegido en el combo el elemento que tiene el id indicado.
+     *
+     * @return true si el elemento existe y quedó elegido
+     */
+    public static boolean seleccionarItem(JComboBox<ItemCombo> combo, String id) {
+        for (int i = 0; i < combo.getItemCount(); i++) {
+            if (Objects.equals(combo.getItemAt(i).getId(), id)) {
+                combo.setSelectedIndex(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @return el id del elemento elegido en el combo, o null si no hay ninguno o es una opción sin id ("Todos")
+     */
+    public static String idElegido(JComboBox<ItemCombo> combo) {
+        ItemCombo item = (ItemCombo) combo.getSelectedItem();
+        return item == null ? null : item.getId();
     }
 
     /**
