@@ -40,6 +40,9 @@ public class UtilDAO {
             case 1146:
                 // Error 1146 = la tabla no existe
                 return "Faltan las tablas en speedfast_db. Carga primero el script sql/speedfast_db.sql.";
+            case 1406:
+                // Error 1406 = el texto no cabe en la columna
+                return "Uno de los textos es más largo de lo que permite la base de datos.";
             case 1451:
                 // Error 1451 = hay filas de otra tabla (entregas) que apuntan a esta
                 return "Tiene entregas registradas. Elimina primero esas entregas.";

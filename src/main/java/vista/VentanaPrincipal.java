@@ -5,27 +5,24 @@ import model.GestorPedidos;
 import javax.swing.*;
 import java.awt.*;
 
-import util.DatosPrecargadosEjemplos;
-
 
 /**
- * Ventana principal de SpeedFast. Desde aquí el usuario navega
- * hacia el registro de pedidos y repartidores, el listado de pedidos
- * y la asignación de entregas.
+ * Ventana principal de SpeedFast. Desde aquí el usuario abre la gestión
+ * de repartidores, la gestión de pedidos y la asignación de entregas.
  */
 public class VentanaPrincipal extends JFrame {
     private final GestorPedidos gestor;
     private VentanaRepartidores ventanaRepartidores;
+    private VentanaPedidos ventanaPedidos;
 
     public VentanaPrincipal() {
         super("SpeedFast - Gestión de Entregas");
         this.gestor = new GestorPedidos();
-        //DatosPrecargadosEjemplos.cargar(gestor);
 
         inicializarComponentes();
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(420, 400);
+        setSize(420, 340);
         setLocationRelativeTo(null);
         setResizable(false);
         setVisible(true);
@@ -46,20 +43,17 @@ public class VentanaPrincipal extends JFrame {
         encabezado.add(subtitulo);
 
         // Botones
-        JButton btnRegistrar = crearBoton("Registrar pedido");
-        JButton btnRepartidor = crearBoton("Gestión de repartidores");
-        JButton btnListar = crearBoton("Listado de pedidos");
+        JButton btnRepartidores = crearBoton("Gestión de repartidores");
+        JButton btnPedidos = crearBoton("Gestión de pedidos");
         JButton btnEntregas = crearBoton("Asignar entrega");
 
-        btnRegistrar.addActionListener(e -> abrirRegistro());
-        btnRepartidor.addActionListener(e -> abrirRepartidores());
-        btnListar.addActionListener(e -> abrirListado());
+        btnRepartidores.addActionListener(e -> abrirRepartidores());
+        btnPedidos.addActionListener(e -> abrirPedidos());
         btnEntregas.addActionListener(e -> abrirAsignarEntrega());
 
-        JPanel panelBotones = new JPanel(new GridLayout(4, 1, 0, 12));
-        panelBotones.add(btnRegistrar);
-        panelBotones.add(btnRepartidor);
-        panelBotones.add(btnListar);
+        JPanel panelBotones = new JPanel(new GridLayout(3, 1, 0, 12));
+        panelBotones.add(btnRepartidores);
+        panelBotones.add(btnPedidos);
         panelBotones.add(btnEntregas);
 
         contenido.add(encabezado, BorderLayout.NORTH);
@@ -74,11 +68,6 @@ public class VentanaPrincipal extends JFrame {
         return boton;
     }
 
-    private void abrirRegistro() {
-        new VentanaRegistroPedido(gestor).setVisible(true);
-
-    }
-
     private void abrirRepartidores() {
         // Si la ventana ya está abierta se trae al frente, en vez de abrir otra
         if (ventanaRepartidores == null || !ventanaRepartidores.isDisplayable()) {
@@ -88,9 +77,12 @@ public class VentanaPrincipal extends JFrame {
         ventanaRepartidores.toFront();
     }
 
-    private void abrirListado() {
-        new VentanaListaPedidos(gestor).setVisible(true);
-
+    private void abrirPedidos() {
+        if (ventanaPedidos == null || !ventanaPedidos.isDisplayable()) {
+            ventanaPedidos = new VentanaPedidos(gestor);
+        }
+        ventanaPedidos.setVisible(true);
+        ventanaPedidos.toFront();
     }
 
     private void abrirAsignarEntrega() {
@@ -98,4 +90,3 @@ public class VentanaPrincipal extends JFrame {
 
     }
 }
-

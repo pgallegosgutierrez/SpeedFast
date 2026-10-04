@@ -89,7 +89,7 @@ public class VentanaAsignarEntrega extends JFrame {
         List<Pedido> pedidosLeidos;
         List<Repartidor> repartidoresLeidos;
         try {
-            pedidosLeidos = PedidoDAO.listarTodos();
+            pedidosLeidos = PedidoDAO.readAll();
             repartidoresLeidos = RepartidorDAO.readAll();
         } catch (RuntimeException e) {
             // Error de base de datos: se avisa y las listas quedan como estaban
