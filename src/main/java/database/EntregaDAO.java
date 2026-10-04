@@ -12,7 +12,7 @@ public class EntregaDAO {
 
     public static void guardar(Entrega entrega) {
         ConexionDB connector = new ConexionDB();
-        String sql = "INSERT INTO entrega (id_pedido, id_repartidor, fecha, hora) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO entregas (id_pedido, id_repartidor, fecha, hora) VALUES (?,?,?,?)";
 
         try (Connection conn = connector.conectar();
              PreparedStatement statement = conn.prepareStatement(sql)) {

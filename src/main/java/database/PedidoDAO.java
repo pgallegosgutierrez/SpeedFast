@@ -17,7 +17,7 @@ public class PedidoDAO {
 
     public static void guardar(Pedido pedido) {
         ConexionDB connector = new ConexionDB();
-        String sql = "INSERT INTO pedido (id, direccion, tipo, estado) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO pedidos (id, direccion, tipo, estado) VALUES (?,?,?,?)";
 
         try (Connection conn = connector.conectar();
              PreparedStatement statement = conn.prepareStatement(sql)) {
@@ -44,7 +44,7 @@ public class PedidoDAO {
 
     public static List<Pedido> listarTodos() {
         ConexionDB connector = new ConexionDB();
-        String sql = "SELECT id, direccion, tipo, estado FROM pedido ORDER BY id";
+        String sql = "SELECT id, direccion, tipo, estado FROM pedidos ORDER BY id";
         List<Pedido> pedidos = new ArrayList<>();
 
         try (Connection conn = connector.conectar();
@@ -75,7 +75,7 @@ public class PedidoDAO {
     }
 
     /**
-     * Crea la subclase de Pedido que corresponde al tipo guardado. La tabla pedido solo tiene
+     * Crea la subclase de Pedido que corresponde al tipo guardado. La tabla pedidos solo tiene
      * id, dirección, tipo y estado, así que los demás datos quedan con valores por defecto.
      */
     private static Pedido crearPedido(String id, String direccion, String tipo) {

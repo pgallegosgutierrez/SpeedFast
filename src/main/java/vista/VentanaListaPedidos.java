@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class VentanaListaPedidos extends JFrame {
 
-    // Las mismas columnas que tiene la tabla pedido en la base de datos
+    // Las mismas columnas que tiene la tabla pedidos en la base de datos
     private static final String[] COLUMNAS = {"ID", "Tipo", "Dirección", "Estado"};
 
     private final GestorPedidos gestor;

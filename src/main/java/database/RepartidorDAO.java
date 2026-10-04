@@ -13,7 +13,7 @@ public class RepartidorDAO {
 
     public static void guardar(Repartidor repartidor) {
         ConexionDB connector = new ConexionDB();
-        String sql = "INSERT INTO repartidor (nombre) VALUES (?)";
+        String sql = "INSERT INTO repartidores (nombre) VALUES (?)";
 
         try (Connection conn = connector.conectar();
              PreparedStatement statement = conn.prepareStatement(sql)) {
@@ -29,7 +29,7 @@ public class RepartidorDAO {
 
     public static List<Repartidor> listarTodos() {
         ConexionDB connector = new ConexionDB();
-        String sql = "SELECT id, nombre FROM repartidor ORDER BY id";
+        String sql = "SELECT id, nombre FROM repartidores ORDER BY id";
         List<Repartidor> repartidores = new ArrayList<>();
 
         try (Connection conn = connector.conectar();

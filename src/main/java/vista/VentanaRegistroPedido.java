@@ -167,8 +167,8 @@ public class VentanaRegistroPedido extends JFrame {
         String direccion = txtDireccion.getText().trim();
         if (direccion.isEmpty()) {
             errores.add("La dirección es obligatoria.");
-        } else if (direccion.length() > 150) {
-            errores.add("La dirección no puede tener más de 150 caracteres.");
+        } else if (direccion.length() > 100) {
+            errores.add("La dirección no puede tener más de 100 caracteres.");
         }
 
         Double distancia = leerNumero(txtDistancia);
