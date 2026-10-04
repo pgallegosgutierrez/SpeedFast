@@ -15,6 +15,7 @@ import util.DatosPrecargadosEjemplos;
  */
 public class VentanaPrincipal extends JFrame {
     private final GestorPedidos gestor;
+    private VentanaRepartidores ventanaRepartidores;
 
     public VentanaPrincipal() {
         super("SpeedFast - Gestión de Entregas");
@@ -46,12 +47,12 @@ public class VentanaPrincipal extends JFrame {
 
         // Botones
         JButton btnRegistrar = crearBoton("Registrar pedido");
-        JButton btnRepartidor = crearBoton("Registrar repartidor");
+        JButton btnRepartidor = crearBoton("Gestión de repartidores");
         JButton btnListar = crearBoton("Listado de pedidos");
         JButton btnEntregas = crearBoton("Asignar entrega");
 
         btnRegistrar.addActionListener(e -> abrirRegistro());
-        btnRepartidor.addActionListener(e -> abrirRegistroRepartidor());
+        btnRepartidor.addActionListener(e -> abrirRepartidores());
         btnListar.addActionListener(e -> abrirListado());
         btnEntregas.addActionListener(e -> abrirAsignarEntrega());
 
@@ -78,9 +79,13 @@ public class VentanaPrincipal extends JFrame {
 
     }
 
-    private void abrirRegistroRepartidor() {
-        new VentanaRegistroRepartidor().setVisible(true);
-
+    private void abrirRepartidores() {
+        // Si la ventana ya está abierta se trae al frente, en vez de abrir otra
+        if (ventanaRepartidores == null || !ventanaRepartidores.isDisplayable()) {
+            ventanaRepartidores = new VentanaRepartidores(gestor);
+        }
+        ventanaRepartidores.setVisible(true);
+        ventanaRepartidores.toFront();
     }
 
     private void abrirListado() {
