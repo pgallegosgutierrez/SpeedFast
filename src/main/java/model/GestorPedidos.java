@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import database.PedidoDAO;
 
 /**
  * Punto central de datos del sistema SpeedFast.
@@ -19,12 +18,9 @@ public class GestorPedidos {
     private final List<Pedido> pedidos = new ArrayList<>();
     private final List<Runnable> listeners = new CopyOnWriteArrayList<>();
     private ExecutorService ejecutor;
-    private PedidoDAO pedido_dao = new PedidoDAO();
 
     public void agregarPedido(Pedido pedido) {
-        //pedidos.add(pedido);
-        System.out.println(pedido);
-        pedido_dao.guardar(pedido);
+        pedidos.add(pedido);
         notificarCambios();
     }
 

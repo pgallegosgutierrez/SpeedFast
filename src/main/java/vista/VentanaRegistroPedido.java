@@ -1,5 +1,6 @@
 package vista;
 
+import database.PedidoDAO;
 import model.*;
 
 import javax.swing.*;
@@ -125,7 +126,7 @@ public class VentanaRegistroPedido extends JFrame {
         return panel;
     }
 
-    /** Valida, crea el pedido, lo agrega al gestor y confirma con JOptionPane. */
+    /** Valida, crea el pedido, lo guarda en la base de datos y confirma con JOptionPane. */
     private void guardarPedido() {
         List<String> errores = validarCampos();
         if (!errores.isEmpty()) {
@@ -136,7 +137,15 @@ public class VentanaRegistroPedido extends JFrame {
         }
 
         Pedido pedido = crearPedido();
-        gestor.agregarPedido(pedido);
+        try {
+            PedidoDAO.guardar(pedido);
+        } catch (RuntimeException e) {
+            // Error de base de datos (ID repetido, MySQL apagado, etc.): se avisa y el formulario sigue abierto
+            JOptionPane.showMessageDialog(this, e.getMessage(),
+                    "No se pudo guardar el pedido", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        gestor.notificarCambios(); // si el listado está abierto, se refresca solo
 
         JOptionPane.showMessageDialog(this,
                 "Pedido " + pedido.getIdPedido() + " (" + pedido.getTipoPedido() + ") registrado correctamente.",
@@ -147,16 +156,19 @@ public class VentanaRegistroPedido extends JFrame {
     /** Revisa todos los campos y devuelve la lista de errores encontrados (vacía si todo está bien). */
     private List<String> validarCampos() {
         List<String> errores = new ArrayList<>();
-        String id = txtId.getText().trim();
+        Integer id = leerEntero(txtId);
 
-        if (id.isEmpty()) {
+        if (txtId.getText().trim().isEmpty()) {
             errores.add("El ID es obligatorio.");
-        } else if (gestor.existeId(id)) {
-            errores.add("Ya existe un pedido con el ID " + id + ".");
+        } else if (id == null || id <= 0) {
+            errores.add("El ID debe ser un número entero mayor a 0.");
         }
 
-        if (txtDireccion.getText().trim().isEmpty()) {
+        String direccion = txtDireccion.getText().trim();
+        if (direccion.isEmpty()) {
             errores.add("La dirección es obligatoria.");
+        } else if (direccion.length() > 150) {
+            errores.add("La dirección no puede tener más de 150 caracteres.");
         }
 
         Double distancia = leerNumero(txtDistancia);
@@ -175,7 +187,7 @@ public class VentanaRegistroPedido extends JFrame {
 
     /** Crea la subclase de Pedido que corresponde al tipo elegido. Se llama solo después de validar. */
     private Pedido crearPedido() {
-        String id = txtId.getText().trim().toUpperCase();
+        String id = String.valueOf(leerEntero(txtId));
         String direccion = txtDireccion.getText().trim();
         double distancia = leerNumero(txtDistancia);
 
@@ -198,6 +210,19 @@ public class VentanaRegistroPedido extends JFrame {
     private Double leerNumero(JTextField campo) {
         try {
             return Double.parseDouble(campo.getText().trim().replace(',', '.'));
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Convierte el texto de un campo a número entero.
+     *
+     * @return el número, o null si el texto no es un entero válido
+     */
+    private Integer leerEntero(JTextField campo) {
+        try {
+            return Integer.parseInt(campo.getText().trim());
         } catch (NumberFormatException e) {
             return null;
         }

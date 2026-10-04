@@ -1,5 +1,6 @@
 package vista;
 
+import database.PedidoDAO;
 import model.GestorPedidos;
 import model.Pedido;
 
@@ -8,17 +9,17 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
 
 /**
- * Muestra en una tabla todos los pedidos registrados en SpeedFast.
+ * Muestra en una tabla todos los pedidos guardados en la base de datos de SpeedFast.
  * La tabla se actualiza sola cuando el gestor avisa que hubo cambios,
  * y también se puede refrescar manualmente con el botón.
  */
 public class VentanaListaPedidos extends JFrame {
 
-    private static final String[] COLUMNAS = {
-            "ID", "Tipo", "Dirección", "Distancia (km)", "Tiempo est. (min)", "Estado", "Repartidor"
-    };
+    // Las mismas columnas que tiene la tabla pedido en la base de datos
+    private static final String[] COLUMNAS = {"ID", "Tipo", "Dirección", "Estado"};
 
     private final GestorPedidos gestor;
     private final Runnable listenerCambios;
@@ -46,7 +47,7 @@ public class VentanaListaPedidos extends JFrame {
         });
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(900, 380);
+        setSize(700, 380);
         setLocationRelativeTo(null);
     }
 
@@ -69,7 +70,7 @@ public class VentanaListaPedidos extends JFrame {
         tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         // Ancho de cada columna (en proporción): la dirección necesita más espacio
-        int[] anchos = {65, 90, 240, 100, 130, 100, 115};
+        int[] anchos = {60, 110, 380, 120};
         for (int i = 0; i < anchos.length; i++) {
             tabla.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
         }
@@ -91,18 +92,25 @@ public class VentanaListaPedidos extends JFrame {
         setContentPane(contenido);
     }
 
-    /** Vacía la tabla y la vuelve a llenar con los pedidos actuales del gestor. */
+    /** Vacía la tabla y la vuelve a llenar con los pedidos guardados en la base de datos. */
     private void refrescarTabla() {
+        List<Pedido> pedidos;
+        try {
+            pedidos = PedidoDAO.listarTodos();
+        } catch (RuntimeException e) {
+            // Error de base de datos: se avisa y la tabla queda como estaba
+            JOptionPane.showMessageDialog(this, e.getMessage(),
+                    "No se pudieron cargar los pedidos", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         modeloTabla.setRowCount(0);
-        for (Pedido p : gestor.getPedidos()) {
+        for (Pedido p : pedidos) {
             modeloTabla.addRow(new Object[]{
                     p.getIdPedido(),
                     p.getTipoPedido(),
                     p.getDireccionEntrega(),
-                    String.format("%.1f", p.getDistanciaKm()),
-                    p.calcularTiempoEntrega(),
-                    p.getEstadoPedido(),
-                    p.getRepartidorAsignado() == null ? "-" : p.getRepartidorAsignado()
+                    p.getEstadoPedido()
             });
         }
         lblTotal.setText("Total: " + modeloTabla.getRowCount() + " pedido(s)");

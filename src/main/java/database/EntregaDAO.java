@@ -26,11 +26,16 @@ public class EntregaDAO {
 
         } catch (NumberFormatException e) {
             System.out.println("Id de pedido o repartidor inválido: " + e.getLocalizedMessage());
-            throw new RuntimeException(e);
+            throw new RuntimeException("El ID del pedido y el del repartidor deben ser números enteros.", e);
         } catch (SQLException e) {
-            // Error 1452 = la FK no existe (pedido o repartidor no registrado)
             System.out.println("Error al guardar entrega [" + e.getErrorCode() + "]: " + e.getLocalizedMessage());
-            throw new RuntimeException(e);
+            if (e.getErrorCode() == 1452) {
+                // Error 1452 = la FK no existe (pedido o repartidor no registrado)
+                throw new RuntimeException("No se pudo registrar la entrega.\nEl pedido " + entrega.getIdPedido()
+                        + " o el repartidor " + entrega.getIdRepartidor()
+                        + " no existe en la base de datos (error 1452 de MySQL).", e);
+            }
+            throw new RuntimeException("No se pudo guardar la entrega.\n" + e.getLocalizedMessage(), e);
         }
     }
 }

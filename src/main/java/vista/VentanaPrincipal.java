@@ -10,10 +10,10 @@ import util.DatosPrecargadosEjemplos;
 
 /**
  * Ventana principal de SpeedFast. Desde aquí el usuario navega
- * hacia el registro de pedidos, el listado y la simulación de entregas.
+ * hacia el registro de pedidos y repartidores, el listado de pedidos
+ * y la asignación de entregas.
  */
 public class VentanaPrincipal extends JFrame {
-    private static final String[] REPARTIDORES = {"Juan Pérez", "Camila Soto", "Luis Díaz"};
     private final GestorPedidos gestor;
 
     public VentanaPrincipal() {
@@ -24,7 +24,7 @@ public class VentanaPrincipal extends JFrame {
         inicializarComponentes();
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(420, 340);
+        setSize(420, 400);
         setLocationRelativeTo(null);
         setResizable(false);
         setVisible(true);
@@ -46,15 +46,18 @@ public class VentanaPrincipal extends JFrame {
 
         // Botones
         JButton btnRegistrar = crearBoton("Registrar pedido");
+        JButton btnRepartidor = crearBoton("Registrar repartidor");
         JButton btnListar = crearBoton("Listado de pedidos");
-        JButton btnEntregas = crearBoton("Asignar repartidor / Iniciar entrega");
+        JButton btnEntregas = crearBoton("Asignar entrega");
 
         btnRegistrar.addActionListener(e -> abrirRegistro());
+        btnRepartidor.addActionListener(e -> abrirRegistroRepartidor());
         btnListar.addActionListener(e -> abrirListado());
-        btnEntregas.addActionListener(e -> iniciarEntregas());
+        btnEntregas.addActionListener(e -> abrirAsignarEntrega());
 
-        JPanel panelBotones = new JPanel(new GridLayout(3, 1, 0, 12));
+        JPanel panelBotones = new JPanel(new GridLayout(4, 1, 0, 12));
         panelBotones.add(btnRegistrar);
+        panelBotones.add(btnRepartidor);
         panelBotones.add(btnListar);
         panelBotones.add(btnEntregas);
 
@@ -75,33 +78,19 @@ public class VentanaPrincipal extends JFrame {
 
     }
 
+    private void abrirRegistroRepartidor() {
+        new VentanaRegistroRepartidor().setVisible(true);
+
+    }
+
     private void abrirListado() {
         new VentanaListaPedidos(gestor).setVisible(true);
 
     }
 
-    private void iniciarEntregas() {
-        if (gestor.hayEntregasEnCurso()) {
-            JOptionPane.showMessageDialog(this,
-                    "Ya hay entregas en curso. Espera a que terminen.",
-                    "Entregas en curso", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+    private void abrirAsignarEntrega() {
+        new VentanaAsignarEntrega().setVisible(true);
 
-        int cantidad = gestor.iniciarEntregas(REPARTIDORES);
-
-        if (cantidad == 0) {
-            JOptionPane.showMessageDialog(this,
-                    "No hay pedidos pendientes para entregar.",
-                    "Sin pedidos", JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
-
-        JOptionPane.showMessageDialog(this,
-                "Se iniciaron " + cantidad + " entrega(s) con " + REPARTIDORES.length + " repartidores.\n"
-                        + "Puedes ver el avance en el listado de pedidos.",
-                "Entregas iniciadas", JOptionPane.INFORMATION_MESSAGE);
-        abrirListado();
     }
 }
 

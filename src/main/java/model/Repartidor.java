@@ -6,6 +6,7 @@ package model;
  * trabajen en paralelo dentro del sistema.
  */
 public class Repartidor implements Runnable {
+    private String id;
     private String nombre;
     private ZonaDeCarga zonaDeCarga;
     private GestorPedidos gestor;
@@ -22,6 +23,43 @@ public class Repartidor implements Runnable {
         this.nombre = nombre;
         this.zonaDeCarga = zonaDeCarga;
         this.gestor = gestor;
+    }
+
+    /**
+     * Crea un repartidor nuevo que todavía no está guardado en la base de datos
+     * (su id lo genera MySQL al guardarlo).
+     *
+     * @param nombre nombre del repartidor
+     */
+    public Repartidor(String nombre) {
+        this.nombre = nombre;
+    }
+
+    /**
+     * Crea un repartidor que ya existe en la base de datos.
+     *
+     * @param id     identificador del repartidor en la base de datos
+     * @param nombre nombre del repartidor
+     */
+    public Repartidor(String id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
+    }
+
+    /**
+     *
+     * @return el identificador del repartidor en la base de datos, o null si aún no se guarda
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     *
+     * @return el nombre del repartidor
+     */
+    public String getNombre() {
+        return nombre;
     }
 
     @Override

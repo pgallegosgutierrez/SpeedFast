@@ -22,8 +22,8 @@ public class RepartidorDAO {
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println("Error al guardar repartidor: " + e.getLocalizedMessage());
-            throw new RuntimeException(e);
+            System.out.println("Error al guardar repartidor [" + e.getErrorCode() + "]: " + e.getLocalizedMessage());
+            throw new RuntimeException("No se pudo guardar el repartidor.\n" + e.getLocalizedMessage(), e);
         }
     }
 
@@ -43,8 +43,8 @@ public class RepartidorDAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("Error al listar repartidores: " + e.getLocalizedMessage());
-            throw new RuntimeException(e);
+            System.out.println("Error al listar repartidores [" + e.getErrorCode() + "]: " + e.getLocalizedMessage());
+            throw new RuntimeException("No se pudieron cargar los repartidores.\n" + e.getLocalizedMessage(), e);
         }
 
         return repartidores;
