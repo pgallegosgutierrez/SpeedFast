@@ -12,6 +12,8 @@ import java.util.concurrent.Executors;
  * Mantiene en memoria la lista de pedidos registrados para que todas
  * las ventanas trabajen sobre la misma información, avisa a quien esté
  * "escuchando" cada vez que los datos cambian, y coordina las entregas.
+ * Las ventanas de gestión lo usan para avisarse entre sí cuando se crea, edita
+ * o elimina un registro en la base de datos, y así refrescar sus tablas y combos.
  */
 public class GestorPedidos {
 

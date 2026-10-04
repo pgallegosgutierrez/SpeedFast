@@ -4,10 +4,6 @@ import vista.VentanaPrincipal;
 
 import javax.swing.SwingUtilities;
 
-import database.ConexionDB;
-
-import java.sql.SQLException;
-
 /**
  * Punto de entrada de SpeedFast. Solo se encarga de abrir la ventana principal.
  */
