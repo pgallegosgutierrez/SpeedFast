@@ -7,7 +7,7 @@
 - **Carrera:** Analista Programador Computacional
 - **Sede:** Online
 
-## SpeedFast — Sistema de Gestión de Entregas
+## SpeedFast - Sistema de Gestión de Entregas
 
 Proyecto académico en Java para la asignatura Desarrollo Orientado a Objetos II (Duoc UC). Modela el sistema de pedidos y entregas de la empresa ficticia SpeedFast, con una interfaz gráfica Swing y persistencia en MySQL mediante JDBC.
 
@@ -58,7 +58,3 @@ La aplicación se conecta a `127.0.0.1:3306` con el usuario `root` y la contrase
 ├── util/        # Clases utilitarias. Datos de ejemplo para pruebas. No forma parte del modelo.
 
 ````
-
-## 📝 Nota sobre la pauta
-
-La pauta de la semana 8 menciona una clase `ClienteDAO`, pero el esquema entregado no tiene una tabla de clientes. Por eso el CRUD se implementó para las tres entidades del esquema: repartidores (`RepartidorDAO`), pedidos (`PedidoDAO`) y entregas (`EntregaDAO`).
